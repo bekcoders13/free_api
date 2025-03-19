@@ -1,0 +1,5 @@
+fastapi~=0.115.11
+PyMySQL~=1.1.1
+SQLAlchemy~=2.0.39
+uvicorn~=0.34.0
+python-multipart~=0.0.20
