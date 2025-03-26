@@ -9,7 +9,7 @@ def role_verification(user, function: str):
     :param function: Bajarilayotgan funksiya nomi
     :raises HTTPException: Agar ruxsat bo'lmasa, 401 xato qaytaradi
     """
-    allowed_functions_for_admins = {}
+    allowed_functions_for_admins = {'get_users'}
     allowed_functions_for_users = {}
 
     if user.role == 'boss':

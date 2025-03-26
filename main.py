@@ -6,8 +6,8 @@ from fastapi.staticfiles import StaticFiles
 import os
 from router import api
 
-USERNAME = 'tamaddi'
-PASSWORD = 'since2025'
+USERNAME = 'admin'
+PASSWORD = 'admin123'
 security = HTTPBasic()
 
 app = FastAPI(
@@ -48,7 +48,7 @@ if not os.path.exists("images"):
 app.include_router(api, prefix='/api/v1')
 
 app.mount(
-    "/images",
+    "/images/",
     StaticFiles(directory=os.path.join(os.getcwd(), "images")),
     name="images"
 )
