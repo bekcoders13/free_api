@@ -8,4 +8,4 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    username: str
+    phone_number: str
