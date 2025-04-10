@@ -3,7 +3,7 @@ from fastapi import HTTPException
 from pydantic import BaseModel, Field, validator
 from typing import Optional
 
-from app.models.users import Users
+from app.models.users import User
 from database import SessionLocal
 
 db = SessionLocal()
@@ -31,8 +31,8 @@ class CreateUser(BaseModel):
 
     @validator('phone_number')
     def phone_validate(cls, phone_number):
-        validate_my = db.query(Users).filter(
-            Users.phone_number == phone_number,
+        validate_my = db.query(User).filter(
+            User.phone_number == phone_number,
         ).count()
 
         if validate_my != 0:

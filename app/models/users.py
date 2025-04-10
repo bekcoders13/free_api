@@ -3,7 +3,7 @@ from sqlalchemy import Column, Integer, String, Text, DateTime
 from database import Base
 
 
-class Users(Base):
+class User(Base):
     __tablename__ = "users"
     id = Column(Integer, primary_key=True, autoincrement=True)
     firstname = Column(String(100), nullable=False)
@@ -14,4 +14,3 @@ class Users(Base):
     password = Column(String(255), nullable=False)
     role = Column(String(100), nullable=False)
     token = Column(Text, nullable=True, default='')
-    # refresh_token = Column(Text, nullable=True, default='')

@@ -8,7 +8,7 @@ from passlib.context import CryptContext
 from sqlalchemy.orm.session import Session
 from starlette import status
 
-from app.models.users import Users
+from app.models.users import User
 from app.schemas.users import CreateUser
 from database import get_db
 from app.schemas.token import Token, TokenData
@@ -57,7 +57,7 @@ def get_current_user(db: Session = Depends(get_db), token: str = Depends(oauth2_
         token_data = TokenData(phone_number=username)
     except JWTError:
         raise credentials_exception
-    user = db.query(Users).where(Users.phone_number == token_data.phone_number).first()
+    user = db.query(User).where(User.phone_number == token_data.phone_number).first()
     if user is None:
         raise credentials_exception
     return user
@@ -70,7 +70,7 @@ async def get_current_active_user(current_user: CreateUser = Depends(get_current
 @login_router.post("/token")
 async def login_for_access_token(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends()):
     phone_number = form_data.username
-    user = db.query(Users).filter(Users.phone_number == phone_number).first()
+    user = db.query(User).filter(User.phone_number == phone_number).first()
     if user:
         is_validate_password = pwd_context.verify(form_data.password, user.password)
     else:
@@ -87,8 +87,8 @@ async def login_for_access_token(db: Session = Depends(get_db), form_data: OAuth
     access_token = create_access_token(
         data={"sub": user.phone_number}, expires_delta=access_token_expires
     )
-    db.query(Users).filter(Users.id == user.id).update({
-        Users.token: access_token
+    db.query(User).filter(User.id == user.id).update({
+        User.token: access_token
     })
     db.commit()
     return {'id': user.id, "role": user.role, "access_token": access_token, "token_type": "bearer"}
@@ -109,7 +109,7 @@ async def refresh_token(
     db: Session = Depends(get_db),
     token: str = None
 ):
-    user = db.query(Users).where(Users.token == token).first()
+    user = db.query(User).where(User.token == token).first()
     if user is None:
         raise HTTPException(
             status_code=400,
@@ -126,8 +126,8 @@ async def refresh_token(
         data={"sub": user.phone_number},
         expires_delta=access_token_expires
     )
-    db.query(Users).filter(Users.id == user.id).update({
-        Users.token: access_token
+    db.query(User).filter(User.id == user.id).update({
+        User.token: access_token
     })
     db.commit()
 

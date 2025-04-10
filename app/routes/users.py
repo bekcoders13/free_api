@@ -6,7 +6,7 @@ from starlette import status
 from app.functions.files import delete_file_f, save_file_db
 from app.functions.users import (get_user_f, get_admin_f, create_general_user_f, update_user_f,
                                  change_role_user_f, delete_user_f)
-from app.models.users import Users
+from app.models.users import User
 from app.routes.login import get_current_active_user
 from app.schemas.users import GetUser, GetAdmin, CreateUser, UpdateUser, UpdateRole
 from app.utils.role_verifications import role_verification
@@ -63,8 +63,8 @@ def get_me(db: Session = Depends(get_db),
     Muvaffaqiyatsiz: 400
     :return:
     """
-    return {'data': (db.query(Users)
-                     .filter(Users.id == current_user.id).all())}
+    return {'data': (db.query(User)
+                     .filter(User.id == current_user.id).all())}
 
 
 @users_router.post('/sign_up', status_code=status.HTTP_201_CREATED)
@@ -96,10 +96,10 @@ def upload_user_file(file: UploadFile,
         Muvaffaqiyatsiz: 400
         :return:
     """
-    file_info = db.query(Users).filter(Users.id == current_user.id).first()
+    file_info = db.query(User).filter(User.id == current_user.id).first()
     if file_info.image_path:
-        delete_file_f(Users, current_user.id, db=db)
-    item = save_file_db(Users, current_user.id, file, db)
+        delete_file_f(User, current_user.id, db=db)
+    item = save_file_db(User, current_user.id, file, db)
     return item
 
 

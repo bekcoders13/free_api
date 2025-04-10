@@ -1,55 +1,43 @@
-from fastapi import APIRouter
-from starlette import status
+from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy.orm import Session
 
-orders_router = APIRouter(
-    prefix="/orders",
-    tags=["Order"]
-)
+from app.routes.login import get_current_active_user
+from app.utils.role_verifications import role_verification
+from database import get_db
+from app.functions.orders import create_order_f, get_orders_f, get_order_f, delete_order_f
+from app.schemas.orders import OrderCreate, OrderRead
 
-
-@orders_router.get('/get', status_code=status.HTTP_200_OK)
-def get_orders():
-    """
-    Buyurtmalarni ko'rish!
-    Muvaffaqiyatli: 200
-    Ro'yxatdan o'tmagansiz: 401
-    Ma'lumot topilmadi: 404
-    :return:
-    """
-    pass
+order_router = APIRouter(prefix="/orders", tags=["Orders"])
 
 
-@orders_router.post('/create', status_code=status.HTTP_201_CREATED)
-def create_order():
-    """
-    Buyurtma yaratish!
-    Muvaffaqiyatli: 201
-    Ro'yxatdan o'tmagansiz: 401
-    Ma'lumot topilmadi: 404
-    :return:
-    """
-    pass
+@order_router.post("/", response_model=OrderRead)
+def create_order(order: OrderCreate, db: Session = Depends(get_db),
+                 current_user=Depends(get_current_active_user)):
+    role_verification(current_user, 'create_order')
+    return create_order_f(db, order)
 
 
-@orders_router.put('/update', status_code=status.HTTP_200_OK)
-def update_order():
-    """
-    Buyurtmani yangilash!
-    Muvaffaqiyatli: 200
-    Ro'yxatdan o'tmagansiz: 401
-    Ma'lumot topilmadi: 404
-    :return:
-    """
-    pass
+@order_router.get("/{order_id}", response_model=OrderRead)
+def read_order(order_id: int, db: Session = Depends(get_db),
+                 current_user=Depends(get_current_active_user)):
+    role_verification(current_user, 'read_order')
+    db_order = get_order_f(db, order_id)
+    if db_order is None:
+        raise HTTPException(status_code=404, detail="Buyurtma topilmadi")
+    return db_order
 
 
-@orders_router.delete('/delete', status_code=status.HTTP_200_OK)
-def delete_order():
-    """
-    Buyurtmani o'chirish!
-    Muvaffaqiyatli: 200
-    Ro'yxatdan o'tmagansiz: 401
-    Ma'lumot topilmadi: 404
-    :return:
-    """
-    pass
+@order_router.get("/", response_model=list[OrderRead])
+def read_orders(skip: int = 0, limit: int = 10, db: Session = Depends(get_db),
+                 current_user=Depends(get_current_active_user)):
+    role_verification(current_user, 'read_orders')
+    return get_orders_f(db, skip=skip, limit=limit)
+
+
+@order_router.delete("/{order_id}")
+def delete_order(order_id: int, db: Session = Depends(get_db),
+                 current_user=Depends(get_current_active_user)):
+    role_verification(current_user, 'delete_order')
+    if delete_order_f(db, order_id):
+        return {"detail": "Buyurtma o‘chirildi"}
+    raise HTTPException(status_code=404, detail="Buyurtma topilmadi")

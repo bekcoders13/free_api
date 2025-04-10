@@ -6,8 +6,8 @@ from fastapi.staticfiles import StaticFiles
 import os
 from router import api
 
-USERNAME = 'admin'
-PASSWORD = 'admin123'
+USERNAME = 'sherzodbek'
+PASSWORD = 'madaminov'
 security = HTTPBasic()
 
 app = FastAPI(
@@ -16,6 +16,10 @@ app = FastAPI(
         'name': "ASILBEK",
         'url': 'https://t.me/murojaat13_bot',
     },
+    description="Boss username: boss, "
+                "Boss password: boss1234: "
+                "Admin username: admin, "
+                "Admin password: admin123",
     docs_url=None,
     redoc_url=None,
 )

@@ -1,20 +1,18 @@
-from sqlalchemy import Column, Integer, Date, ForeignKey
+from sqlalchemy import Column, Integer, Date, Double, String
 
-from app.models.products import Products
-from app.models.users import Users
+from app.models.users import User
 from database import Base
 from sqlalchemy.orm import relationship
 
 
-class Orders(Base):
+class Order(Base):
     __tablename__ = 'orders'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    product_id = Column(Integer)
+    table_number = Column(Integer)
     user_id = Column(Integer)
     order_date = Column(Date, nullable=False)
-    total_price = Column(Integer, nullable=False)
+    total_price = Column(Double, nullable=False)
+    status = Column(String(50), default='kutilmoqda')
 
-    product = relationship("Products", foreign_keys=product_id,
-                           primaryjoin=lambda: Products.id == Orders.product_id)
-    user = relationship("Users", foreign_keys=user_id,
-                        primaryjoin=lambda: Users.id == Orders.user_id)
+    user = relationship('User', foreign_keys=user_id,
+                        primaryjoin=lambda: User.id == Order.user_id)

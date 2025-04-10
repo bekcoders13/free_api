@@ -1,49 +1,49 @@
 from datetime import date
 from fastapi import HTTPException
 
-from app.models.users import Users
-from app.routes.login import get_password_hash, refresh_token
+from app.models.users import User
+from app.routes.login import get_password_hash
 from app.utils.db_operations import save_in_db
 
 
 def get_user_f(ident, name, db):
     if ident > 0:
-        ident_filter = Users.id == ident
+        ident_filter = User.id == ident
     else:
-        ident_filter = Users.id > 0
+        ident_filter = User.id > 0
 
     if name:
         search_formatted = "%{}%".format(name)
-        search_filter = (Users.firstname.like(search_formatted) |
-                         Users.lastname.like(search_formatted))
+        search_filter = (User.firstname.like(search_formatted) |
+                         User.lastname.like(search_formatted))
     else:
-        search_filter = Users.id > 0
+        search_filter = User.id > 0
 
-    items = (db.query(Users)
-             .filter(ident_filter, search_filter, Users.role == 'user').order_by(Users.id.desc()).all())
+    items = (db.query(User)
+             .filter(ident_filter, search_filter, User.role == 'user').order_by(User.id.desc()).all())
     return {"data": items}
 
 
 def get_admin_f(ident, name, role, db):
     if ident > 0:
-        ident_filter = Users.id == ident
+        ident_filter = User.id == ident
     else:
-        ident_filter = Users.id > 0
+        ident_filter = User.id > 0
 
     if name:
         search_formatted = "%{}%".format(name)
-        search_filter = (Users.firstname.like(search_formatted) |
-                         Users.lastname.like(search_formatted))
+        search_filter = (User.firstname.like(search_formatted) |
+                         User.lastname.like(search_formatted))
     else:
-        search_filter = Users.id > 0
+        search_filter = User.id > 0
 
-    items = (db.query(Users)
-             .filter(ident_filter, search_filter, Users.role == role.name).order_by(Users.id.desc()).all())
+    items = (db.query(User)
+             .filter(ident_filter, search_filter, User.role == role.name).order_by(User.id.desc()).all())
     return {"data": items}
 
 
 def create_general_user_f(form, db):
-    new_item_db = Users(
+    new_item_db = User(
         firstname=form.firstname,
         lastname=form.lastname,
         phone_number=form.phone_number,
@@ -56,18 +56,18 @@ def create_general_user_f(form, db):
 
 
 def update_user_f(form, user, db):
-    db.query(Users).filter(Users.id == user.id).update({
-        Users.firstname: form.firstname,
-        Users.lastname: form.lastname,
-        Users.password: get_password_hash(form.password),
+    db.query(User).filter(User.id == user.id).update({
+        User.firstname: form.firstname,
+        User.lastname: form.lastname,
+        User.password: get_password_hash(form.password),
     })
     db.commit()
     return {"detail": "Yangilandi!!!"}
 
 
 def change_role_user_f(form, db):
-    updated_rows = db.query(Users).filter(Users.id == form.id).update({
-        Users.role: form.role.name,
+    updated_rows = db.query(User).filter(User.id == form.id).update({
+        User.role: form.role.name,
     })
     db.commit()
 
@@ -78,6 +78,6 @@ def change_role_user_f(form, db):
 
 
 def delete_user_f(db, user):
-    db.query(Users).filter(Users.id == user.id).delete()
+    db.query(User).filter(User.id == user.id).delete()
     db.commit()
     return {"message": "User deleted!"}
