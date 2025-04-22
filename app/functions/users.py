@@ -43,12 +43,13 @@ def get_admin_f(ident, name, role, db):
 
 
 def create_general_user_f(form, db):
+    print(f"salom: {get_password_hash(form.password)}, password: {form.password}")
     new_item_db = User(
         firstname=form.firstname,
         lastname=form.lastname,
         phone_number=form.phone_number,
         password=get_password_hash(form.password),
-        role="user",
+        role="admin",
         created_at=date.today(),
     )
     save_in_db(db, new_item_db)

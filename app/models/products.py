@@ -1,12 +1,13 @@
 from sqlalchemy import Column, String, Integer, Date, Text, Double
+from sqlalchemy.orm import relationship
 
 from app.models.categories import Category
 from database import Base
-from sqlalchemy.orm import relationship
 
 
 class Product(Base):
     __tablename__ = 'products'
+
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(255), nullable=False)
     price = Column(Double, nullable=False)

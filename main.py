@@ -6,6 +6,7 @@ from fastapi.staticfiles import StaticFiles
 import os
 from router import api
 
+# apiga ruxsat etilgan shaxslar kirishi uchun login va parol
 USERNAME = 'sherzodbek'
 PASSWORD = 'madaminov'
 security = HTTPBasic()
@@ -14,7 +15,7 @@ app = FastAPI(
     title='Tamaddi.uz Platform API',
     contact={
         'name': "ASILBEK",
-        'url': 'https://t.me/murojaat13_bot',
+        'url': 'https://t.me/Sherzodbek_0304',
     },
     description="Boss username: boss, "
                 "Boss password: boss1234: "

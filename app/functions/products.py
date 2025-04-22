@@ -1,3 +1,5 @@
+import datetime
+
 from sqlalchemy import desc
 
 from app.models.categories import Category
@@ -48,6 +50,7 @@ def create_f(form, db):
         discount_price=form.discount_price,
         discount_start=form.discount_start,
         discount_end=form.discount_end,
+        created_at=datetime.date.today()
     )
     save_in_db(db, new_item)
     return {"detail": f"{form.name} mahsuloti qo'shildi!"}

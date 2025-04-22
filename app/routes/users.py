@@ -18,7 +18,9 @@ users_router = APIRouter(
 )
 
 
-@users_router.get('/get_users', status_code=status.HTTP_200_OK)
+@users_router.get('/get_users',
+                  summary="Foydalanuvchilarni olish",
+                  status_code=status.HTTP_200_OK)
 def get_users(form: GetUser = Depends(GetUser), db: Session = Depends(get_db),
               current_user=Depends(get_current_active_user)):
     role_verification(current_user, 'get_users')
@@ -70,8 +72,8 @@ def get_me(db: Session = Depends(get_db),
 @users_router.post('/sign_up', status_code=status.HTTP_201_CREATED)
 def sign_up_user(form: Annotated[CreateUser, Body(examples=[
     {
-        "firstname": "Asilbek",
-        "lastname": "Tojaliyev",
+        "firstname": "Sherzodbek",
+        "lastname": "Madaminov",
         "phone_number": "+998912345678",
         "password": '********',
     }

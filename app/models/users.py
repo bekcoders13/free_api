@@ -11,6 +11,6 @@ class User(Base):
     image_path = Column(String(255), nullable=True)
     created_at = Column(DateTime, nullable=False)
     phone_number = Column(String(14), nullable=False)
-    password = Column(String(255), nullable=False)
+    password = Column(Text, nullable=False)
     role = Column(String(100), nullable=False)
     token = Column(Text, nullable=True, default='')

@@ -19,7 +19,7 @@ def create_order(order: OrderCreate, db: Session = Depends(get_db),
 
 @order_router.get("/{order_id}", response_model=OrderRead)
 def read_order(order_id: int, db: Session = Depends(get_db),
-                 current_user=Depends(get_current_active_user)):
+               current_user=Depends(get_current_active_user)):
     role_verification(current_user, 'read_order')
     db_order = get_order_f(db, order_id)
     if db_order is None:
@@ -29,7 +29,7 @@ def read_order(order_id: int, db: Session = Depends(get_db),
 
 @order_router.get("/", response_model=list[OrderRead])
 def read_orders(skip: int = 0, limit: int = 10, db: Session = Depends(get_db),
-                 current_user=Depends(get_current_active_user)):
+                current_user=Depends(get_current_active_user)):
     role_verification(current_user, 'read_orders')
     return get_orders_f(db, skip=skip, limit=limit)
 

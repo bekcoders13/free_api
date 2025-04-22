@@ -13,6 +13,7 @@ api = APIRouter()
 
 Base.metadata.create_all(bind=engine)
 
+# barcha routerlar shu yerga import qilinadi
 api.include_router(login_router)
 api.include_router(users_router)
 api.include_router(category_router)

@@ -3,6 +3,8 @@ PyMySQL~=1.1.1
 SQLAlchemy~=2.0.39
 uvicorn~=0.34.0
 python-multipart~=0.0.20
-passlib~=1.7.4
-bcrypt~=3.1.0
-python-jose
+passlib[bcrypt]
+python-jose~=3.4.0
+# import qilingan pekkeijlar (packages)
+starlette~=0.46.1
+pydantic~=2.10.6

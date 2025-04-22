@@ -73,5 +73,5 @@ def delete_categories(ident: int, db: Session = Depends(get_db),
     try:
         db.query(Category).filter(Category.id == ident).delete()
         return {"detail": f"{ident} id dagi ma'lumot o'chirildi!"}
-    except Exception as e:
+    except Exception:
         raise HTTPException(400, "Noto'g'ri id")
