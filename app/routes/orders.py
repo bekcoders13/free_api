@@ -4,8 +4,8 @@ from sqlalchemy.orm import Session
 from app.routes.login import get_current_active_user
 from app.utils.role_verifications import role_verification
 from database import get_db
-from app.functions.orders import create_order_f, get_orders_f, get_order_f, delete_order_f
-from app.schemas.orders import OrderCreate, OrderRead
+from app.functions.orders import create_order_f, get_orders_f, get_order_f, delete_order_f, update_f
+from app.schemas.orders import OrderCreate, OrderRead, StatusType
 
 order_router = APIRouter(prefix="/orders", tags=["Orders"])
 
@@ -32,6 +32,13 @@ def read_orders(skip: int = 0, limit: int = 10, db: Session = Depends(get_db),
                 current_user=Depends(get_current_active_user)):
     role_verification(current_user, 'read_orders')
     return get_orders_f(db, skip=skip, limit=limit)
+
+
+@order_router.put('/change_status')
+def update_status(ident: int, status: StatusType, db: Session = Depends(get_db),
+                  current_user=Depends(get_current_active_user)):
+    role_verification(current_user, 'update_status')
+    return update_f(ident, status, db)
 
 
 @order_router.delete("/{order_id}")

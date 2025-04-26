@@ -47,3 +47,11 @@ def delete_order_f(db: Session, order_id: int):
         db.commit()
         return True
     return False
+
+
+def update_f(ident, status, db):
+    db.query(Order).filter(Order.id == ident).update({
+        Order.status: status
+    })
+    db.commit()
+    return {"detail": "yangilandi"}
